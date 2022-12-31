@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../../models/question_model.dart';
 
 class DataUploader extends GetxController {
   @override
@@ -11,6 +14,8 @@ class DataUploader extends GetxController {
   }
 
   Future<void> uploadData() async {
+    final firestore = FirebaseFirestore.instance;
+
     //Fetches data from assets folder & decodes it.
     final manifestContent = await DefaultAssetBundle.of(Get.context!)
         .loadString("AssetManifest.json");
@@ -22,9 +27,15 @@ class DataUploader extends GetxController {
             path.startsWith("assets/DB/paper") &&
             path.contains(".json")) // Ensuring data fetched is json format
         .toList();
+
+    List<QuestionModel> questionsPapers = [];
+    //Looping through the json data
     for (var paper in papersAssets) {
       String m = await rootBundle.loadString(paper);
-      print(m);
+      // print(m);
+      questionsPapers.add(QuestionModel.fromJson(json.decode(m)));
     }
+    // print('${questionsPapers[0].description}');
+    var batch = firestore.batch();
   }
 }
