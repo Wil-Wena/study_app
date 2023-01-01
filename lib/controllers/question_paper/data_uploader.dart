@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:study_app/firebase_references/firebase_loading_status.dart';
 import 'package:study_app/firebase_references/references.dart';
 
 import '../../models/question_model.dart';
@@ -14,7 +15,12 @@ class DataUploader extends GetxController {
     super.onReady();
   }
 
+  final loadingStatus =
+      LoadingStatus.loading.obs; //LoadingStatus made observable
+
   Future<void> uploadData() async {
+    loadingStatus.value = LoadingStatus.loading;
+
     final fire = FirebaseFirestore.instance;
 
     //Fetches data from assets folder & decodes it.
@@ -70,5 +76,6 @@ class DataUploader extends GetxController {
       }
     }
     await batch.commit();
+    loadingStatus.value = LoadingStatus.completed;
   }
 }
