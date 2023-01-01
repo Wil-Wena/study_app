@@ -40,7 +40,8 @@ class DataUploader extends GetxController {
     var batch = fire.batch();
 
     /**Creating collections on Firebase
-     * Database being uploaded to Firebase
+     * Data collections uploaded and 
+     * fields specifyed for each JSON file in assets DB.
      * */
     for (var paper in questionPapers) {
       batch.set(questionPaperRef.doc(paper.id), {
@@ -52,6 +53,21 @@ class DataUploader extends GetxController {
             ? 0
             : paper.questions!.length //Questions can be nullable.
       });
+
+      //Specifying fields for question collections
+      for (var questions in paper.questions!) {
+        final questionPath =
+            questionRef(paperId: paper.id, questionId: questions.id);
+        batch.set(questionPath, {
+          "question": questions.question,
+          "correct_answer": questions.correctAnswer,
+        });
+
+        for (var answer in questions.answers) {
+          batch.set(questionPath.collection("answers").doc(answer.identifier),
+              {"identifier": answer.identifier, "answer": answer.answer});
+        }
+      }
     }
     await batch.commit();
   }
