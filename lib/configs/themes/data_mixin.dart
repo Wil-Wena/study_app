@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:study_app/configs/themes/colors.dart';
 
 mixin subThemeData {
   getTextTheme() {

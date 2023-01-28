@@ -25,7 +25,11 @@ class WelcomeScreen extends StatelessWidget {
                     reverse: false, height: 150, width: 1000),
                 const Text(
                   "Welcome to WilEducate. This is a study app to help you prepare well for short quizes and exams.",
-                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: onSurfaceTextColor,
+                      fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 30),
                 CircleButton(
